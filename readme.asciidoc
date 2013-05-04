@@ -3,51 +3,51 @@ Rtems Kernel Image Project (RKI)
 
 This project provides a starting point or example of how to configure an RTEMS application for your project. It provides:
 
--RAM Disk setup
--NVRAM Disk setup
--Network setup ( if the target supports it )
--Shell setup and shell startup script
--Example shell commands including whetstone and dhrystone benchmarks
--Makefiles for a couple of targets ( ARM/Raspberry Pi and SPARC/sis simulator )
+- RAM Disk setup
+- NVRAM Disk setup
+- Network setup ( if the target supports it )
+- Shell setup and shell startup script
+- Example shell commands including whetstone and dhrystone benchmarks
+- Makefiles for a couple of targets ( ARM/Raspberry Pi and SPARC/sis simulator )
 
 Each target can be independantly configured. 
 
 How to Configure for your target
 -------------------------------
 
-==RTEMS Configuration
-
-==RKI configuration
-
+(TBD)
 
 How to build
 ------------
 
+(TBD)
 
 Commands to try
 ---------------
 
-List all tasks
+(TBD)
+
+.List all tasks
 --------------
 # task
 --------------
 
-List all semaphores
+.List all semaphores
 -------------------
 # sema
 -------------------
 
-Run the Dhrystone benchmark
+.Run the Dhrystone benchmark
 ---------------------------
 # dhrystone
 ---------------------------
 
-Run the Whetstone benchmark
+.Run the Whetstone benchmark
 ---------------------------
 # whetstone
 ---------------------------
 
-Create 5 tasks that run for 10 seconds
+.Create 5 tasks that run for 10 seconds
 ---------------------------
 # taskdemo
 ---------------------------
