@@ -1,0 +1,2 @@
+mkrfs /dev/ramdisk
+mount -t rfs /dev/ramdisk /ram
