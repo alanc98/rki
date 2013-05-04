@@ -151,7 +151,7 @@ default::$(EXE_TARGET)
 ## Build Tar image
 ##
 $(TAR_IMAGE)::
-	$(CD) rootfs; $(TAR) cf ../tarfile shell-init etc ram eeprom tftp
+	$(CD) rootfs; $(TAR) cf ../tarfile shell-init etc 
 	$(LINKER) -r --noinhibit-exec -o $(TAR_IMAGE) -b binary tarfile
 
 ##
