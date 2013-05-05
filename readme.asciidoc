@@ -1,7 +1,11 @@
 Rtems Kernel Image Project (RKI)
 --------------------------------
 
-This project provides a starting point or example of how to configure an RTEMS application for your project. It provides:
+This project provides a starting point or example of how to configure an RTEMS application for your project. There are many ways to configure an RTEMS application, this project is just something I have done to help me run on various targets. It is put together from different examples I have found, most of which have been contributed by RTEMS developers. 
+
+NOTE: I have tested this on the Raspberry Pi and the SPARC/sis simulator with RTEMS 4.11. I have not tested this particular project with RTEMS 4.10, but a variation of it. I am not sure the RAM disk code will compile and run on RTEMS 4.10.
+
+This project configuration provides:
 
 - RAM Disk setup
 - NVRAM Disk setup
@@ -10,12 +14,19 @@ This project provides a starting point or example of how to configure an RTEMS a
 - Example shell commands including whetstone and dhrystone benchmarks
 - Makefiles for a couple of targets ( ARM/Raspberry Pi and SPARC/sis simulator )
 
-Each target can be independantly configured. 
+Each target can be configured and compiled separately. 
 
-How to Configure for your target
--------------------------------
+New targets can be added by copying one of the build directories. 
 
-For the Raspberry Pi, use the build-arm-rpi subdirectory. Edit the following lines in the Makefile: 
+I am sure someone will figure out how to use WAF to build this image as well ( hint hint )
+
+How to Configure the RKI image 
+------------------------------
+
+For the Raspberry Pi, enter the build-arm-rpi subdirectory. 
+For the SPARC/sis simulator target, enter the build-sparc-sis directory.
+
+In either directory, edit the following lines in the Makefile: 
 
 .Edit these lines in the Makefile
 ----------------------------------------------
@@ -26,13 +37,21 @@ RTEMS_TOOL_BASE=/home/alan/Projects/rtems/4.11
 RTEMS_BSP_BASE=/home/alan/Projects/rtems/4.11
 ----------------------------------------------
 
+In addition to the build environment, you can also configure many of the options in the RKI. Take a close look at the following files:
+
+.Config Files
+- rtems_config.h
+- rki_config.h
+- rtems_net_config.h
+
+
 How to build
 ------------
 
-.If you have the following set up:
+.Make sure you have the following set up correctly
 - arm-rtems4.11 tools installed
-- raspberrypi BSP compiled and installed
-- The above paths set to the right place
+- arm/raspberrypi and or sparc/sis BSP compiled and installed
+- The paths in the makefile set to the tools and BSP 
 
 You should be able to just type
 
@@ -40,7 +59,30 @@ You should be able to just type
 $ make 
 -------------------------------
 
-To build.
+to build the executable.
+
+How to run the RKI image
+------------------------
+
+Here is how to run the rki program on the SPARC/sis simulator and the raspberry pi:
+
+.SPARC/sis
+-------------------------------------------------
+$ make    # build the image
+$ ./run-sis.sh
+(gdb) target sim
+(gdb) load
+(gdb) run
+-------------------------------------------------
+
+.Raspberry Pi
+------------------------------------------------
+$ make    # build the image
+$ cp rki.bin kernel.img 
+
+( Now copy the kernel.img to your Raspberry Pi SD card. Be sure to back up the old kernel.img! )
+------------------------------------------------ 
+
 
 Commands to try
 ---------------
