@@ -15,17 +15,37 @@ Each target can be independantly configured.
 How to Configure for your target
 -------------------------------
 
-(TBD)
+For the Raspberry Pi, use the build-arm-rpi subdirectory. Edit the following lines in the Makefile: 
+
+.Edit these lines in the Makefile
+----------------------------------------------
+##
+## paths for the RTEMS tools and RTEMS BSP
+##
+RTEMS_TOOL_BASE=/home/alan/Projects/rtems/4.11
+RTEMS_BSP_BASE=/home/alan/Projects/rtems/4.11
+-----------------------------------------------
 
 How to build
 ------------
 
-(TBD)
+.If you have the following set up:
+- arm-rtems4.11 tools installed
+- raspberrypi BSP compiled and installed
+- The above paths set to the right place
+
+You should be able to just type
+
+--------------------------------
+$ make 
+-------------------------------
+
+To build.
 
 Commands to try
 ---------------
 
-(TBD)
+When you run the application on a target, you should get the shell prompt. Try some of these commands:
 
 .List all tasks
 --------------
@@ -52,6 +72,20 @@ Commands to try
 # taskdemo
 ---------------------------
 
+There are quite a few more commands to run, just type
 
+--------------------------
+# help
+--------------------------
+
+You can also add your own commands, and include a startup script 
+
+Check out what the startup script is doing by typing:
+
+--------------------------
+# cat shell-init
+--------------------------
+
+In the case of the Raspberry Pi BSP, it is formatting a RAM disk with the RTEMS file system, then mounting the disk on /ram.
 
 
