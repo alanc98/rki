@@ -24,7 +24,7 @@ For the Raspberry Pi, use the build-arm-rpi subdirectory. Edit the following lin
 ##
 RTEMS_TOOL_BASE=/home/alan/Projects/rtems/4.11
 RTEMS_BSP_BASE=/home/alan/Projects/rtems/4.11
------------------------------------------------
+----------------------------------------------
 
 How to build
 ------------
@@ -36,7 +36,7 @@ How to build
 
 You should be able to just type
 
---------------------------------
+-------------------------------
 $ make 
 -------------------------------
 
