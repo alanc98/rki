@@ -3,7 +3,7 @@ Rtems Kernel Image Project (RKI)
 
 This project provides a starting point or example of how to configure an RTEMS application for your project. There are many ways to configure an RTEMS application, this project is just something I have done to help me run on various targets. It is put together from different examples I have found, most of which have been contributed by RTEMS developers. 
 
-NOTE: I have tested this on the Raspberry Pi and the SPARC/sis simulator with RTEMS 4.11. I have not tested this particular project with RTEMS 4.10, but a variation of it. I am not sure the RAM disk code will compile and run on RTEMS 4.10.
+NOTE: I have tested this on the Raspberry Pi and the SPARC/sis simulator with RTEMS 4.11. I have not tested this project with RTEMS 4.10. I am not sure the RAM disk code will compile and run on RTEMS 4.10.
 
 This project configuration provides:
 
@@ -16,17 +16,11 @@ This project configuration provides:
 
 Each target can be configured and compiled separately. 
 
-New targets can be added by copying one of the build directories. 
-
-I am sure someone will figure out how to use WAF to build this image as well ( hint hint )
-
 How to Configure the RKI image 
 ------------------------------
 
 For the Raspberry Pi, enter the build-arm-rpi subdirectory. 
 For the SPARC/sis simulator target, enter the build-sparc-sis directory.
-
-In either directory, edit the following lines in the Makefile: 
 
 .Edit these lines in the Makefile
 ----------------------------------------------
@@ -49,7 +43,7 @@ How to build
 ------------
 
 .Make sure you have the following set up correctly
-- arm-rtems4.11 tools installed
+- arm-rtems4.11 and/or sparc-rtems4.11 tools installed
 - arm/raspberrypi and or sparc/sis BSP compiled and installed
 - The paths in the makefile set to the tools and BSP 
 
@@ -64,7 +58,7 @@ to build the executable.
 How to run the RKI image
 ------------------------
 
-Here is how to run the rki program on the SPARC/sis simulator and the raspberry pi:
+Here is how to run the rki program on the SPARC/sis simulator:
 
 .SPARC/sis
 -------------------------------------------------
@@ -75,6 +69,8 @@ $ ./run-sis.sh
 (gdb) run
 -------------------------------------------------
 
+And the Raspberry Pi:
+
 .Raspberry Pi
 ------------------------------------------------
 $ make    # build the image
@@ -82,7 +78,6 @@ $ cp rki.bin kernel.img
 
 ( Now copy the kernel.img to your Raspberry Pi SD card. Be sure to back up the old kernel.img! )
 ------------------------------------------------ 
-
 
 Commands to try
 ---------------
@@ -128,6 +123,7 @@ Check out what the startup script is doing by typing:
 # cat shell-init
 --------------------------
 
-In the case of the Raspberry Pi BSP, it is formatting a RAM disk with the RTEMS file system, then mounting the disk on /ram.
+In the case of the Raspberry Pi BSP, it formats a 64 Megabyte RAM disk with the RTEMS file system, then mounts the disk on /ram.
+
 
 
