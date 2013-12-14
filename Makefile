@@ -5,40 +5,40 @@
 ##
 ## paths for the RTEMS tools and RTEMS BSP
 ##
-RTEMS_TOOL_BASE=/home/alan/Projects/rtems/4.11
-RTEMS_BSP_BASE=/home/alan/Projects/rtems/4.11
+RTEMS_TOOL_BASE ?= /home/alan/Projects/rtems/4.11
+RTEMS_BSP_BASE ?= /home/alan/Projects/rtems/4.11
+
+##
+## Windows paths
+## RTEMS_TOOL_BASE=c:\opt\rtems\4.11
+## RTEMS_BSP_BASE=e:\Projects\rtems\bsps\rtems-4.11
+##
 
 ##
 ## Architecture Definitions
 ##
-ARCH           = sparc-rtems4.11
-BSP            = sis
+ARCH           ?= arm-rtems4.11
+BSP            ?= raspberrypi
 PREFIX         = $(RTEMS_TOOL_BASE)
 RTEMS_PREFIX   = $(RTEMS_BSP_BASE)
 RTEMS_ARCH_LIB = $(RTEMS_PREFIX)/$(ARCH)/$(BSP)/lib
 
 ##
-## Linker flags / options
+## Linker flags that are needed
 ##
-LDFLAGS = --pipe -B$(RTEMS_ARCH_LIB) -specs bsp_specs -qrtems $(WARNINGS) -mcpu=cypress
+#LDFLAGS ?= mcpu=arm1176jzf-s
+LDFLAGS += --pipe -B$(RTEMS_ARCH_LIB) -specs bsp_specs -qrtems $(WARNINGS)
 
 ##
-## Compiler Architecture Switches 
+## Compiler Architecture Switches
 ##
-ARCH_OPTS = --pipe -mcpu=cypress -B$(RTEMS_ARCH_LIB) -specs bsp_specs -qrtems -D__SPARC__
+#ARCH_OPTS ?= -mcpu=arm1176jzf-s -D__ARM__
+ARCH_OPTS += --pipe -B$(RTEMS_ARCH_LIB) -specs bsp_specs -qrtems
 
-
-#################################################################################
-
-##
-## Let the makefile find the source
-##
-VPATH := ../
-
-INCLUDE_PATH := -I../ -I.
+INCLUDE_PATH := -I. -Iinclude/
 
 WARNINGS	= -Wall
-DEBUG_OPTS      = -g -O0
+DEBUG_OPTS	 = -g -O2
 
 ##
 ## define build products
@@ -51,7 +51,7 @@ LINKSCRIPT       = linkcmds
 ##
 ## Objects to build
 ##
-OBJS = init.o rtems_net.o rtems_net_svc.o local_shell_cmds.o filesys.o 
+OBJS = init.o rtems_net.o rtems_net_svc.o local_shell_cmds.o filesys.o
 
 ##
 ## Optional objects in src directory
@@ -60,8 +60,8 @@ OBJS += ramdisk.o
 OBJS += nvramdisk.o
 
 ##
-## RTEMS examples / Demos
-## 
+## RTEMS examples / demos
+##
 OBJS += task_cmd.o
 OBJS += hello_cmd.o
 OBJS += dhrystone_cmd.o
@@ -148,7 +148,7 @@ default::$(EXE_TARGET)
 ## Build Tar image
 ##
 $(TAR_IMAGE)::
-	$(CD) rootfs; $(TAR) cf ../tarfile shell-init etc 
+	$(CD) rootfs; $(TAR) cf ../tarfile shell-init etc
 	$(LINKER) -r --noinhibit-exec -o $(TAR_IMAGE) -b binary tarfile
 
 ##
