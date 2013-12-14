@@ -12,26 +12,9 @@ This project configuration provides:
 - Network setup ( if the target supports it )
 - Shell setup and shell startup script
 - Example shell commands including whetstone and dhrystone benchmarks
-- Makefiles for a couple of targets ( ARM/Raspberry Pi and SPARC/sis simulator )
+- Common Makefile for a couple of targets ( ARM/Raspberry Pi and SPARC/sis simulator )
 
-Each target can be configured and compiled separately. 
-
-How to Configure the RKI image 
-------------------------------
-
-For the Raspberry Pi, enter the build-arm-rpi subdirectory. 
-For the SPARC/sis simulator target, enter the build-sparc-sis directory.
-
-.Edit these lines in the Makefile
-----------------------------------------------
-##
-## paths for the RTEMS tools and RTEMS BSP
-##
-RTEMS_TOOL_BASE=/home/alan/Projects/rtems/4.11
-RTEMS_BSP_BASE=/home/alan/Projects/rtems/4.11
-----------------------------------------------
-
-In addition to the build environment, you can also configure many of the options in the RKI. Take a close look at the following files:
+You can configure many of the options in the RKI. Take a close look at the following files:
 
 .Config Files
 - rtems_config.h
@@ -45,12 +28,11 @@ How to build
 .Make sure you have the following set up correctly
 - arm-rtems4.11 and/or sparc-rtems4.11 tools installed
 - arm/raspberrypi and or sparc/sis BSP compiled and installed
-- The paths in the makefile set to the tools and BSP 
 
-You should be able to just type
+You then need to type, replacing the paths and ARCH/BSP appropriately
 
 -------------------------------
-$ make 
+$ make ARCH=sparc-rtems4.11 BSP=sis RTEMS_TOOL_BASE=/home/cdesai/rtems/tools RTEMS_BSP_BASE=/home/cdesai/rtems/4.11
 -------------------------------
 
 to build the executable.
@@ -62,8 +44,8 @@ Here is how to run the rki program on the SPARC/sis simulator:
 
 .SPARC/sis
 -------------------------------------------------
-$ make    # build the image
-$ ./run-sis.sh
+$ make ARCH=sparc-rtems4.11 BSP=sis RTEMS_TOOL_BASE=/home/cdesai/rtems/tools RTEMS_BSP_BASE=/home/cdesai/rtems/4.11    # build the image
+$ sparc-rtems4.11-gdb rki.elf
 (gdb) target sim
 (gdb) load
 (gdb) run
@@ -73,7 +55,7 @@ And the Raspberry Pi:
 
 .Raspberry Pi
 ------------------------------------------------
-$ make    # build the image
+$ make ARCH=arm-rtems4.11 BSP=raspberrypi RTEMS_TOOL_BASE=/home/cdesai/rtems/tools RTEMS_BSP_BASE=/home/cdesai/rtems/4.11    # build the image
 $ cp rki.bin kernel.img 
 
 ( Now copy the kernel.img to your Raspberry Pi SD card. Be sure to back up the old kernel.img! )
@@ -124,6 +106,3 @@ Check out what the startup script is doing by typing:
 --------------------------
 
 In the case of the Raspberry Pi BSP, it formats a 64 Megabyte RAM disk with the RTEMS file system, then mounts the disk on /ram.
-
-
-
