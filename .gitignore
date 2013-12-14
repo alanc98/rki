@@ -1,0 +1,11 @@
+*.pyc
+.lock-waf_*
+*~
+build/*
+*.o
+*.lis
+rki.bin
+rki.elf
+*.slf
+*.img
+tarfile
