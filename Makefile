@@ -22,6 +22,7 @@ BSP            ?= raspberrypi
 PREFIX         = $(RTEMS_TOOL_BASE)
 RTEMS_PREFIX   = $(RTEMS_BSP_BASE)
 RTEMS_ARCH_LIB = $(RTEMS_PREFIX)/$(ARCH)/$(BSP)/lib
+BUILD_DIR ?= legacy-build/$(ARCH)-$(BSP)
 
 ##
 ## Linker flags that are needed
@@ -83,7 +84,7 @@ LIBS = -lm
 ##
 ## Extra Cflags for Assembly listings, etc.
 ##
-LIST_OPTS    = -Wa,-a=$*.lis
+LIST_OPTS    = -Wa,-a=$(BUILD_DIR)/$*.lis
 
 ##
 ## General gcc options that apply to compiling and dependency generation.
@@ -129,43 +130,49 @@ SIZE       = $(ARCH)-size
 ##
 default::$(EXE_TARGET)
 
+# Create the output directory
+$(BUILD_DIR):
+	$(MKDIR) -p $(BUILD_DIR)
+
 #  Install rule is mission/target specific
 #  install::$(EXE_TARGET)
+
+OBJS2 := $(addprefix $(BUILD_DIR)/, $(OBJS))
 
 ##
 ## Compiler rule
 ##
 .c.o:
-	$(COMPILER)  $(COPTS) $(DEBUG_OPTS)  -c -o $@ $<
+	$(COMPILER)  $(COPTS) $(DEBUG_OPTS)  -c -o $(BUILD_DIR)/$@ $<
 
 ##
 ## Assembly Code Rule
 ##
 .s.o:
-	$(COMPILER) $(ASOPTS) $(COPTS) $(DEBUG_OPTS)  -c -o $@ $<
+	$(COMPILER) $(ASOPTS) $(COPTS) $(DEBUG_OPTS)  -c -o $(BUILD_DIR)/$@ $<
 
 ##
 ## Build Tar image
 ##
+## Apparently linker does not like getting paths as the last argument, so
+## passing $(BUILD_DIR)/tarfile creates an unusable file
+## So create it like it was used to, and then move it to the build dir
 $(TAR_IMAGE)::
 	$(CD) rootfs; $(TAR) cf ../tarfile shell-init etc
-	$(LINKER) -r --noinhibit-exec -o $(TAR_IMAGE) -b binary tarfile
+	$(LINKER) -r --noinhibit-exec -o $(BUILD_DIR)/$(TAR_IMAGE) -b binary tarfile
+	$(MV) tarfile $(BUILD_DIR)/tarfile
 
 ##
 ## Link Rule to make the final executable image
 ## add symtab.o for symbol table
-$(EXE_TARGET): $(OBJS)  $(TAR_IMAGE)
-	$(COMPILER) $(DEBUG_FLAGS) $(LDFLAGS) -o $(EXE_TARGET) $(OBJS) $(TAR_IMAGE) $(LIBS)
-	$(OBJCOPY) -O binary --strip-all $(EXE_TARGET) $(BINARY_TARGET)
-	$(SIZE) $(EXE_TARGET)
+$(EXE_TARGET): $(BUILD_DIR) $(OBJS)  $(TAR_IMAGE)
+	$(COMPILER) $(DEBUG_FLAGS) $(LDFLAGS) -o $(BUILD_DIR)/$(EXE_TARGET) $(OBJS2) $(BUILD_DIR)/$(TAR_IMAGE) $(LIBS)
+	$(OBJCOPY) -O binary --strip-all $(BUILD_DIR)/$(EXE_TARGET) $(BUILD_DIR)/$(BINARY_TARGET)
+	$(SIZE) $(BUILD_DIR)/$(EXE_TARGET)
 
 ##
 ## Make clean rule
 ##
 clean::
-	-$(RM) $(OBJS) $(EXE_TARGET) $(BINARY_TARGET)  *.slf
-	-$(RM) $(TAR_IMAGE) tarfile
-	-$(RM) *.lis
-	-$(RM) *.img
-
+	-$(RM) -r $(BUILD_DIR)
 
