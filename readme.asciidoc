@@ -14,6 +14,8 @@ This project configuration provides:
 - Example shell commands including whetstone and dhrystone benchmarks
 - Common Makefile for a couple of targets ( ARM/Raspberry Pi and SPARC/sis simulator )
 
+Each target can be configured and compiled separately.
+
 You can configure many of the options in the RKI. Take a close look at the following files:
 
 .Config Files
@@ -45,7 +47,7 @@ Here is how to run the rki program on the SPARC/sis simulator:
 .SPARC/sis
 -------------------------------------------------
 $ make ARCH=sparc-rtems4.11 BSP=sis RTEMS_TOOL_BASE=/home/cdesai/rtems/tools RTEMS_BSP_BASE=/home/cdesai/rtems/4.11    # build the image
-$ sparc-rtems4.11-gdb rki.elf
+$ sparc-rtems4.11-gdb legacy-build/sparc-rtems4.11-sis/rki.elf
 (gdb) target sim
 (gdb) load
 (gdb) run
@@ -56,7 +58,7 @@ And the Raspberry Pi:
 .Raspberry Pi
 ------------------------------------------------
 $ make ARCH=arm-rtems4.11 BSP=raspberrypi RTEMS_TOOL_BASE=/home/cdesai/rtems/tools RTEMS_BSP_BASE=/home/cdesai/rtems/4.11    # build the image
-$ cp rki.bin kernel.img 
+$ cp legacy-build/arm-rtems4.11-raspberrypi/rki.bin legacy-build/arm-rtems4.11-raspberrypi/kernel.img
 
 ( Now copy the kernel.img to your Raspberry Pi SD card. Be sure to back up the old kernel.img! )
 ------------------------------------------------ 
