@@ -43,7 +43,7 @@ def build(bld):
 
     bld.env.CFLAGS += ['-O0','-g']
     bld(rule='tar -C ' + bld.path.find_dir('rootfs').abspath() + \
-              ' -cf tarfile . ;' + \
+              ' -cf tarfile shell-init etc ;' + \
               bld.get_env()['LD'] + ' -r --noinhibit-exec -o tarfile.o -b binary tarfile ',
         target='tarfile.o',
         name='tarfile.o')
