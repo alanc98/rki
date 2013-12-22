@@ -17,6 +17,7 @@
 # Currently supported bsps are sparc/sis and arm/raspberrypi
 #
 
+from os import listdir
 import sys
 
 try:
@@ -43,7 +44,8 @@ def build(bld):
 
     bld.env.CFLAGS += ['-O0','-g']
     bld(rule='tar -C ' + bld.path.find_dir('rootfs').abspath() + \
-              ' -cf tarfile shell-init etc ;' + \
+              ' -cf tarfile ' + ' '.join([str(item) for item in \
+              listdir(bld.path.find_dir('rootfs').abspath())]) + ' ;' + \
               bld.get_env()['LD'] + ' -r --noinhibit-exec -o tarfile.o -b binary tarfile ',
         target='tarfile.o',
         name='tarfile.o')
