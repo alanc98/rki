@@ -108,6 +108,7 @@ CD=cd
 TAR=tar
 CAT=cat
 MKDIR=mkdir
+LS=ls
 
 ##
 ## Compiler tools
@@ -158,7 +159,7 @@ OBJS2 := $(addprefix $(BUILD_DIR)/, $(OBJS))
 ## passing $(BUILD_DIR)/tarfile creates an unusable file
 ## So create it like it was used to, and then move it to the build dir
 $(TAR_IMAGE)::
-	$(CD) rootfs; $(TAR) cf ../tarfile shell-init etc
+	$(CD) rootfs; $(TAR) cf ../tarfile $(shell $(LS) rootfs)
 	$(LINKER) -r --noinhibit-exec -o $(BUILD_DIR)/$(TAR_IMAGE) -b binary tarfile
 	$(MV) tarfile $(BUILD_DIR)/tarfile
 
