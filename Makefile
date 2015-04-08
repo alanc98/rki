@@ -4,9 +4,11 @@
 
 ##
 ## paths for the RTEMS tools and RTEMS BSP
+##   my paths are the same since I install the tools and
+##   bsp in the same directory
 ##
-RTEMS_TOOL_BASE ?= /home/alan/Projects/rtems/4.11
-RTEMS_BSP_BASE ?= /home/alan/Projects/rtems/4.11
+RTEMS_TOOL_BASE ?= /home/alan/rtems/4.11
+RTEMS_BSP_BASE ?= /home/alan/rtems/4.11
 
 ##
 ## Windows paths
@@ -17,8 +19,15 @@ RTEMS_BSP_BASE ?= /home/alan/Projects/rtems/4.11
 ##
 ## Architecture Definitions
 ##
+
+##
+## Select your BSP here 
+##  I switch between the Pi1 and Pi2
+##
+## BSP         ?= raspberrypi
+BSP            ?= raspberrypi2
+
 ARCH           ?= arm-rtems4.11
-BSP            ?= raspberrypi
 PREFIX         = $(RTEMS_TOOL_BASE)
 RTEMS_PREFIX   = $(RTEMS_BSP_BASE)
 RTEMS_ARCH_LIB = $(RTEMS_PREFIX)/$(ARCH)/$(BSP)/lib
@@ -27,13 +36,19 @@ BUILD_DIR ?= legacy-build/$(ARCH)-$(BSP)
 ##
 ## Linker flags that are needed
 ##
-#LDFLAGS ?= mcpu=arm1176jzf-s
-LDFLAGS += --pipe -B$(RTEMS_ARCH_LIB) -specs bsp_specs -qrtems $(WARNINGS)
+
+## (Uncomment for Pi1 ) LDFLAGS ?= -mcpu=arm1176jzf-s 
+LDFLAGS ?= -march=armv7-a -mthumb -mfpu=neon -mfloat-abi=hard -mtune=cortex-a7 
+
+LDFLAGS += --pipe -B$(RTEMS_ARCH_LIB) -specs bsp_specs -qrtems $(WARNINGS) 
 
 ##
 ## Compiler Architecture Switches
 ##
-#ARCH_OPTS ?= -mcpu=arm1176jzf-s -D__ARM__
+
+## (Uncomment for Pi1 ) ARCH_OPTS ?= -mcpu=arm1176jzf-s -D__ARM__  
+ARCH_OPTS ?= -march=armv7-a -mthumb -mfpu=neon -mfloat-abi=hard -mtune=cortex-a7 -D__ARM__  
+
 ARCH_OPTS += --pipe -B$(RTEMS_ARCH_LIB) -specs bsp_specs -qrtems
 
 INCLUDE_PATH := -I. -Iinclude/
