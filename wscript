@@ -38,15 +38,14 @@ def configure(conf):
 def build(bld):
     rtems.build(bld)
 
-    arch = bld.get_env()['RTEMS_ARCH']
-    bsp = bld.get_env()['RTEMS_BSP']
-    objcopy = bld.get_env()['OBJCOPY']
+    objcopycmd = ' '.join(bld.get_env()['OBJCOPY'])
+    ldcmd = ' '.join(bld.get_env()['LD'])
 
     bld.env.CFLAGS += ['-O0','-g']
     bld(rule='tar -C ' + bld.path.find_dir('rootfs').abspath() + \
               ' -cf tarfile ' + ' '.join([str(item) for item in \
               listdir(bld.path.find_dir('rootfs').abspath())]) + ' ;' + \
-              bld.get_env()['LD'] + ' -r --noinhibit-exec -o tarfile.o -b binary tarfile ',
+              ldcmd + ' -r --noinhibit-exec -o tarfile.o -b binary tarfile ',
         target='tarfile.o',
         name='tarfile.o')
     bld(features = 'c cprogram',
@@ -59,7 +58,7 @@ def build(bld):
         includes = 'include',
         lib = 'm',
         name = 'rki.elf')
-    bld(rule=objcopy + ' -O binary --strip-all rki.elf ${TGT}',
+    bld(rule=objcopycmd + ' -O binary --strip-all rki.elf ${TGT}',
         source = 'rki.elf',
         target='rki.bin',
         name='rki.bin')
