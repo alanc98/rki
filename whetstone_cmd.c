@@ -8,7 +8,7 @@ extern int whetstonemain(int argc, char **argv);
 */
 int whetstone_command( int argc, char *argv[])
 {
-   int n;
+   int n = 0;
    char *args[]= {"whetstone", "5", "" };
 
    printf("Running Whetstone Command!\n");
