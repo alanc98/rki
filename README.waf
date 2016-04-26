@@ -13,10 +13,10 @@ Steps
 -----
 
 1. Build or install the tools. In this example the path is
-   $HOME/Development/rtems/4.11.
+   $HOME/Development/rtems/4.12.
 
 2. Build and install the RTEMS Board Support Packages you want to use. In this
-   example the path is $HOME/Development/rtems/build/4.11.
+   example the path is $HOME/Development/rtems/build/4.12.
 
 3. Unpack this package somewhere, anywhere on your disk and change into the top
    level directory.
@@ -30,8 +30,9 @@ Steps
    and RTEMS and provided on the command line and so do not need to be in your
    path or environment [1] and we limit the build to 'sparc/sis' BSP:
 
-    $ waf configure --rtems=$HOME/Development/rtems/build/4.11 \
-                    --rtems-tools=$HOME/Development/rtems/4.11 \
+    $ waf configure --rtems=$HOME/Development/rtems/build/4.12 \
+                    --rtems-tools=$HOME/Development/rtems/4.12 \
+                    --rtems-version=4.12 \
                     --rtems-bsps=sparc/sis
 
    You can use '--rtems-archs=sparc,sis' or
@@ -43,8 +44,8 @@ Steps
 
 7. Run the executable using the simulator:
 
-    $ $HOME/Development/rtems/4.11/bin/sparc-rtems4.11-run \
-       ./build/sparc-rtems4.11-sis/rki.elf
+    $ $HOME/Development/rtems/4.12/bin/sparc-rtems4.12-run \
+       ./build/sparc-rtems4.12-sis/rki.elf
 
 [1] It is good practice to keep your environment as empty as possible. Setting
     paths to tools or specific values to configure or control builds is
