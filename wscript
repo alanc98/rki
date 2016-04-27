@@ -54,8 +54,9 @@ def build(bld):
                   'local_shell_cmds.c', 'filesys.c', 'ramdisk.c', \
                   'nvramdisk.c', 'task_cmd.c', 'hello_cmd.c', \
                   'dhrystone_cmd.c', 'whetstone_cmd.c', 'benchmarks.c', \
+                  'sensehatdisplay_cmd.c', 'drivers/sensehatdisplay.c', \
                   'tarfile.o'],
-        includes = 'include',
+        includes = ['include','include/drivers'],
         lib = 'm',
         name = 'rki.elf')
     bld(rule=objcopycmd + ' -O binary --strip-all rki.elf ${TGT}',

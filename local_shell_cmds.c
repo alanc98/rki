@@ -31,6 +31,7 @@ int hello_command( int argc, char *argv[]);
 int task_command( int argc, char *argv[]);
 int dhrystone_command( int argc, char *argv[]);
 int whetstone_command( int argc, char *argv[]);
+int shd_test_command( int argc, char *argv[]);
 
 
 /*
@@ -126,6 +127,8 @@ int rtems_add_local_cmds(void)
    rtems_shell_add_cmd("dhrystone","misc","Run the Dhrystone Benchmark",dhrystone_command);
 
    rtems_shell_add_cmd("whetstone","misc","Run the Whetstone Benchmark",whetstone_command);
+
+   rtems_shell_add_cmd("sensed","misc","Test the Sense HAT Display",shd_test_command);
 
    shell_init_script();
 
