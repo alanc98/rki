@@ -6,7 +6,8 @@
  *   
  *  The eeprom i2c device might serve as a good template for this.
  *  its kind of wierd with the device struct that is a superstruct of the i2c_dev type.
- *   pribably dont need the extra stuff that eeprom uses.
+ *   probably dont need the extra stuff that eeprom uses.
+ *
  * 
 */
 
@@ -52,7 +53,7 @@ uint8_t SHD_inverse_gamma[] =
 */
 
 /*
-** Do I need this? I think I do. It arranges the array into the format that the
+** This function arranges the array into the format that the
 ** LED array needs.
 ** I need to understand how this works
 **  i.e. does it do:
@@ -81,117 +82,6 @@ void MapToHat(uint8_t *output, int outputOffset, uint8_t *input, int inputOffset
 
    }
 }
-
-
-/*
-** In addition to moving the buffer around, it also looks like
-** the gamma is applied to each byte
-**  What is this gamma operation doing?
-**  Can I do this directly in the driver?
-**       b[i] = _gamma[buffer[i] >> 3];
-** This says:  buffer[i] = _gamma[input buffer[i] >> 3]
-**  It is taking the value in the buffer shifting it right 3 bits, then returning what is in the gamma array.
-**      I think that the intensity is 0 - 31, ( or 5 bits )
-**      So it is translating the 0 - 31 into the actual value that is needed
-*/
-#if 0
-void WriteLEDs(int address, byte[] buffer)
-{
-     if (buffer.Length + address > 192)
-            {
-                throw new ArgumentException("Address outside range (address + buffer length must be <= 192", "buffer");
-            }
-            if (address < 0)
-            {
-                throw new ArgumentException("Address can't be less than zero", "address");
-            }
-            byte[] b = new byte[buffer.Length];
-            for (int i = 0; i < buffer.Length; i++)
-            {
-                b[i] = _gamma[buffer[i] >> 3];
-            }
-            WriteBytes((byte)address, b);
-        }
-
-        public void WriteLEDMatrix(byte [] buffer)
-        {
-            WriteLEDs(0, buffer);
-        }
-
-        public byte [] ReadLEDs(int address, int size)
-        {
-            if (size + address > 192)
-            {
-                throw new ArgumentException("Address outside range (address + size length must be <= 192", "size");
-            }
-            if (address < 0)
-            {
-                throw new ArgumentException("Address can't be less than zero", "address");
-            }
-            byte[] b = ReadBytes((byte)address, size);
-            byte[] buffer = new byte[b.Length];
-            for (int i = 0; i < b.Length; i++)
-            {
-                buffer[i] = (byte)(_inverse_gamma[b[i] & 0x1F] << 3);
-            }
-            return buffer;
-        }
-
-        public byte[] ReadLEDMatrix()
-        {
-            return ReadLEDs(0, 192);
-        }
-
-        public byte ReadWai()
-        {
-            return ReadByte(0xf0);
-        }
-
-        public byte ReadVersion()
-        {
-            return ReadByte(0xf1);
-        }
-
-        public byte ReadKeys()
-        {
-            return ReadByte(0xf2);
-        }
-
-        public byte ReadEEWp()
-        {
-            return ReadByte(0xf4);
-        }
-
-#endif
-
-/*
-** Its used like this
-*/
-#if 0
-
-      A set of pixels from the source image,
-      Then a set of Hat Pixels that are in the right order for the Hat
-
-      byte[] sourcePixels = pixelData.DetachPixelData();
-      byte[] hatPixels = new byte[192];
-
-      Here is is i = 0 ; i < 256/4/8 ; i++   or i = 0; i < 8; i++
-      for(int i=0;i<(sourcePixels.Length/4)/8; i++)
-      {
-            MapToHat ( hatPixels, 0 * 8 * 3, sourcePixels , 0 * 8 * 4)
-            MapToHat ( hatPixels, 1 * 8 * 3 ( or 24 ) , sourcePixels, 32)      
-            So MapToHat does one row at a time, converting a 32 bit RGBA to RRR GGG BBB AAA type of thing
-            _ledHat.MapToHat(hatPixels, i * 8 * 3, sourcePixels, i * 8 * 4);
-      }
-      /* After each row is converted, then write it out to the LED matrix ( after applying gamma ) */
-      _ledHat.WriteLEDMatrix(hatPixels);
-            }
-        }
-#endif
-
-/*
-*** working stuff here ----->
-*/
 
 /*
 ** Read an array of bytes from device
