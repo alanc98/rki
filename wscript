@@ -45,7 +45,7 @@ def build(bld):
     bld(rule='tar -C ' + bld.path.find_dir('rootfs').abspath() + \
               ' -cf tarfile ' + ' '.join([str(item) for item in \
               listdir(bld.path.find_dir('rootfs').abspath())]) + ' ;' + \
-              ldcmd + ' -r --noinhibit-exec -o tarfile.o -b binary tarfile ',
+              ldcmd + ' --noinhibit-exec -o tarfile.o -b binary tarfile ',
         target='tarfile.o',
         name='tarfile.o')
     bld(features = 'c cprogram',
@@ -55,6 +55,7 @@ def build(bld):
                   'nvramdisk.c', 'task_cmd.c', 'hello_cmd.c', \
                   'dhrystone_cmd.c', 'whetstone_cmd.c', 'benchmarks.c', \
                   'sensehatdisplay_cmd.c', 'drivers/sensehatdisplay.c', \
+                  'sensehat_HTS221_cmd.c', 'drivers/HTS221.c', \
                   'tarfile.o'],
         includes = ['include','include/drivers'],
         lib = 'm',
